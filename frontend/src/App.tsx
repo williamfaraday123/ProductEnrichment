@@ -2,10 +2,19 @@ import axios from 'axios';
 import React, { useState } from 'react';
 
 interface Product {
-    productName: string;
-    brand: string;
-    description?: string;
-}
+  productName: string;
+  brand: string;
+  itemWeight?: string;
+  ingredients?: string;
+  productDescription?: string;
+  storageRequirements?: string;
+  itemsPerPackage?: string;
+  color?: string;
+  material?: string;
+  width?: string;
+  height?: string;
+  warranty?: string;
+};
 
 const App: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([
@@ -41,6 +50,15 @@ const App: React.FC = () => {
                         <th>Product Name</th>
                         <th>Brand</th>
                         <th>Description</th>
+                        <th>Weight</th>
+                        <th>Ingredients</th>
+                        <th>Storage</th>
+                        <th>Items per Package</th>
+                        <th>Color</th>
+                        <th>Material</th>
+                        <th>Width</th>
+                        <th>Height</th>
+                        <th>Warranty</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -49,7 +67,16 @@ const App: React.FC = () => {
                         <tr key={index}>
                             <td>{product.productName}</td>
                             <td>{product.brand}</td>
-                            <td>{product.description || "No description available"}</td>
+                            <td>{product.productDescription || "No description available"}</td>
+                            <td>{product.itemWeight || "N/A"}</td>
+                            <td>{product.ingredients || "N/A"}</td>
+                            <td>{product.storageRequirements || "N/A"}</td>
+                            <td>{product.itemsPerPackage || "N/A"}</td>
+                            <td>{product.color || "N/A"}</td>
+                            <td>{product.material || "N/A"}</td>
+                            <td>{product.width || "N/A"}</td>
+                            <td>{product.height || "N/A"}</td>
+                            <td>{product.warranty || "N/A"}</td>
                             <td>
                                 <button onClick={() => enrichProduct(product)}>Enrich</button>
                             </td>
