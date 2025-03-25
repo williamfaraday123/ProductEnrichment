@@ -32,15 +32,15 @@ const App: React.FC = () => {
             const response = await axios.get('http://localhost:5000/fetch');
             setProducts(response.data?.map((p: any) => ({
                 id: p.id,
-                productName: p.productName,
+                productName: p.productname,
                 brand: p.brand,
                 images: p.images,
                 barcode: p.barcode,
-                itemWeight: p.itemWeight,
+                itemWeight: p.itemweight,
                 ingredients: p.ingredients,
-                productDescription: p.productDescription,
-                storageRequirements: p.storageRequirements,
-                itemsPerPackage: p.itemsPerPackage,
+                productDescription: p.productdescription,
+                storageRequirements: p.storagerequirements,
+                itemsPerPackage: p.itemsperpackage,
                 color: p.color,
                 material: p.material,
                 width: p.width,
@@ -109,7 +109,7 @@ const App: React.FC = () => {
                         <tr key={index}>
                             <td>{product.productName}</td>
                             <td>{product.brand}</td>
-                            <td><img src={product.images || "No image available"} className="image"/></td>
+                            <td>{product.images ? <img src={product.images} className="image"/> : "No image available"}</td>
                             <td>{product.productDescription || "No description available"}</td>
                             <td>{product.itemWeight || "N/A"}</td>
                             <td>{product.ingredients || "N/A"}</td>

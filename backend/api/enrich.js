@@ -1,10 +1,9 @@
-const OpenAI = require('openai');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { pool } = require('../database/db');
 require('dotenv').config();
 
-// OpenAI configuration
-const openai = new OpenAI({
-    apiKey: process.env['OPENAI_API_KEY'],
-});
+// Gemini configuration
+const genAI = new GoogleGenerativeAI(process.env['GEMINI_API_KEY']);
 
 const extractNumber = (text) => {
     const match = text.match(/\d+(\.\d+)?/); // Match integers or floats
@@ -24,7 +23,7 @@ const update = async (updatedData) => {
                 material = $7,
                 width = $8,
                 height = $9,
-                warranty = $10,
+                warranty = $10
              WHERE productName = $11 and brand = $12
              RETURNING *`,
             [
@@ -42,15 +41,9 @@ const update = async (updatedData) => {
                 updatedData.brand,
             ]
         );
-
-        if (result.rowCount === 0) {
-            return res.status(404).json({ error: 'Product not found' });
-        }
-
-        res.json(result.rows[0]);
     } catch (error) {
         console.error('Error updating product:', error);
-        res.status(500).json({ error: 'Failed to update product' });
+        throw error;
     }
 };
 
@@ -72,19 +65,14 @@ const enrich = async (req, res) => {
             warranty: `What is the warranty period for ${productName} by ${brand}? Provide only the warranty in years as a number.`,
         };
 
-        // Call OpenAI to generate enriched data for each attribute
+        // Call Gemini to generate enriched data for each attribute
         const enrichedData = {};
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
         for (const [attribute, prompt] of Object.entries(prompts)) {
-            const response = await openai.chat.completions.create({
-                model: 'gpt-4o',
-                messages: [
-                    { role: 'developer', content: 'You are a helpful assistant' },
-                    { role: 'user', content: prompt }
-                ],
-                max_tokens: 100,
-            });
-            rawValue = response.choices[0]?.message?.content?.trim() || null;
+            const result = await model.generateContent(prompt);
+            const response = await result.response;
+            const rawValue = response?.text()?.trim() || null;
 
             //parse and format the response based on attribute type
             switch (attribute) {
