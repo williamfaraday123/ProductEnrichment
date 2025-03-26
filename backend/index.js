@@ -28,6 +28,11 @@ const startServer = async () => {
     }
 }
 
+app.get('/', (req, res) => {
+    res.send('Welcome to the Product Enrichment Backend!');
+});
+
+  
 //get all products endpoint
 app.get('/fetch', fetch);
 // Enrich product endpoint
