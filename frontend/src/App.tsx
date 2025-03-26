@@ -29,7 +29,7 @@ const App: React.FC = () => {
           try {
             setLoading(true);
             setError('');
-            const response = await axios.get('http://localhost:5000/fetch');
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/fetch`);
             setProducts(response.data?.map((p: any) => ({
                 id: p.id,
                 productName: p.productname,
@@ -62,7 +62,7 @@ const App: React.FC = () => {
         try {
             setLoading(true);
             setError('');
-            await axios.post('http://localhost:5000/enrich', {
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/enrich`, {
                 productName: product.productName,
                 brand: product.brand,
             });

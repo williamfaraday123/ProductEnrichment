@@ -6,7 +6,7 @@ const { fetch } = require('./api/fetch');
 require("dotenv").config();
 
 const app = express();
-const port = 5000;
+const port = process.env['PORT'] || 5000;
 
 // Middleware
 app.use(cors());
@@ -23,7 +23,7 @@ const startServer = async () => {
             console.log(`Server running on http://localhost:${port}`);
         });
     } catch (err) {
-        console.err('Failed to start server:', err);
+        console.error('Failed to start server:', err);
         process.exit(1);
     }
 }
